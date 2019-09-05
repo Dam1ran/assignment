@@ -1,0 +1,4 @@
+6002 lines received
+4870 good records
+1131 bad records
+4870 rows wrote to DB
