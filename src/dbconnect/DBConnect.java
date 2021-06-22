@@ -1,6 +1,10 @@
 package dbconnect;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DBConnect {
@@ -18,26 +22,22 @@ public class DBConnect {
 
             String record = "INSERT INTO data(A,B,C,D,E,F,G,H,I,J)" +
                     " VALUES(?,?,?,?,?,?,?,?,?,?)";
+            
             recordStatements = conn.prepareStatement(record);
-
-
-        } catch(Exception se){
-
+        } catch(SQLException se){
             se.printStackTrace();
         }
-
     }
 
     public void addRecord(List<String> aLine){
-
         try {
-            for(int i =0;i<10;i++)
-            recordStatements.setString(i+1,aLine.get(i));
-            recordStatements.addBatch();
+            for(int i =0;i<10;i++){
+                recordStatements.setString(i+1,aLine.get(i));
+                recordStatements.addBatch();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public int write(){
@@ -52,8 +52,6 @@ public class DBConnect {
             for(int i:result) {
                 if(result[i]==1) wroteRows++;
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,19 +59,18 @@ public class DBConnect {
         try{
             if(stmt!=null) stmt.close();
             if(recordStatements!=null) recordStatements.close();
-        }catch(SQLException ignored){
+        }
+        catch(SQLException ignored){
         }
 
         try{
             if(conn!=null) conn.close();
             System.out.println("Closed connection...");
-        }catch(SQLException se){
+        }
+        catch(SQLException se){
             se.printStackTrace();
         }
 
         return wroteRows;
-
     }
-
-
 }
